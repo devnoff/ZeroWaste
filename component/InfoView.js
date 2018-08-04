@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, Text, TouchableOpacity } from 'react-native';
+import { View, SafeAreaView, Text, TouchableOpacity, Image, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather'
 
 export default class InfoView extends Component {
 
   state = {
-    code: this.props.navigation.getParam('code', '')
+    code: this.props.navigation.getParam('code', ''),
+    photo: this.props.navigation.getParam('photo', null),
   }
 
   constructor(props) {
     super(props);
 
+    console.log(this.props.navigation.getParam('photo', null))
 
   }
 
@@ -20,7 +22,8 @@ export default class InfoView extends Component {
 
   render() {
     const {
-      code
+      code,
+      photo
     } = this.state
 
     return (
@@ -32,12 +35,38 @@ export default class InfoView extends Component {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{flex: 1, backgroundColor: 'white'}}>
-          <Text>Info View</Text>
-          <Text>Code: {code}</Text>
+        <View style={{height: 100, backgroundColor: 'white', flexDirection: 'row', padding: 10}}>
+          <Image source={{uri: photo.path}} style={{width: 60, height: 60*1.33}} />
+          <View style={{flexDirection: 'column', justifyContent: 'center', paddingLeft: 10}}>
+            <Text style={{fontWeight: 'bold', fontSize: 20}}>{code}</Text>
+            <Text>Coca Cola Company</Text>
+            <Text>Manufactured in NSW, Australia</Text>
+          </View>
         </View>
-        <View style={{flex: 1, backgroundColor: 'blue'}}>
-
+        <View style={{flex: 1, backgroundColor: '#efefef', padding: 20}}>
+          <View style={{
+            width: '100%',
+            backgroundColor: 'orange',
+            alignItems: 'center',
+            padding: 10,
+            paddingVertical: 40,
+            borderRadius: 10
+          }}>
+            <Text style={{
+              fontSize: 42,
+              fontWeight: '600',
+              color: 'rgba(0,0,0,0.5)',
+              shadowColor: '#fff',
+              // shadowOffset: { width: 1, height: 1 },
+              // shadowOpacity: 1,
+              // shadowRadius: 0,
+            }}>10 WIZ</Text>
+            <Text style={{fontSize: 20, fontWeight: '600', color: '#333'}}>REWARD</Text>
+          </View>
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <Button style={{flex: 1, padding: 10}}>Take</Button>
+          <Button style={{flex: 1, padding: 10}}>Donate</Button>
         </View>
       </SafeAreaView>
     )
