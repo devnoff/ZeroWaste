@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, Text, TouchableOpacity, Image, Button } from 'react-native';
+import { StyleSheet, View, SafeAreaView, Text, TouchableOpacity, Image, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather'
 
 export default class InfoView extends Component {
@@ -63,12 +63,36 @@ export default class InfoView extends Component {
             }}>10 WIZ</Text>
             <Text style={{fontSize: 20, fontWeight: '600', color: '#333'}}>REWARD</Text>
           </View>
-        </View>
-        <View style={{flexDirection: 'row'}}>
-          <Button style={{flex: 1, padding: 10}}>Take</Button>
-          <Button style={{flex: 1, padding: 10}}>Donate</Button>
+          <View style={{flexDirection: 'row', marginTop: 10}}>
+            <TouchableOpacity style={[styles.button, styles.left]}>
+              <Text style={styles.buttonText}>Add to Wallet</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.button, styles.right]}>
+              <Text style={styles.buttonText}>Donate</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </SafeAreaView>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  button: {
+    flex: 1,
+    padding: 10,
+    borderRadius: 5
+  },
+  buttonText: {
+    color: 'white',
+    textAlign: 'center'
+  },
+  left: {
+    backgroundColor: 'red',
+    marginRight: 5
+  },
+  right: {
+    backgroundColor: 'blue',
+    marginLeft: 5
+  }
+});
