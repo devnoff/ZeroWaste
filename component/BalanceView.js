@@ -60,12 +60,12 @@ export default class BalanceView extends Component {
             <FlatList
               data={ account_histories ? account_histories : [] }
               renderItem={({item}) => (
-                <View>
+                <View key={item.id}>
                   <View>
-                    <Text key={item.id}>{item.data.quantity}</Text>
+                    <Text>{item.data.quantity}</Text>
                   </View>
                   <View>
-                    <Text key={item.id}>{item.data.memo}</Text>
+                    <Text>{item.data.memo}</Text>
                   </View>
                 </View>
               )}
