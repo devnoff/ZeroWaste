@@ -81,6 +81,7 @@ export default class InfoView extends Component {
               <Text style={styles.buttonText}>Add to Wallet</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.button, styles.right]}>
+              <Image source={{uri: 'http://www.wwf.org.au/ecThemes/3/Images/wwf-logo.svg'}} />
               <Text style={styles.buttonText}>Donate</Text>
             </TouchableOpacity>
           </View>
