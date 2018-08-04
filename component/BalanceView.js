@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, Text, TouchableOpacity } from 'react-native';
+import { View, FlatList, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather'
 
 import eos from '../library/eos';
@@ -11,7 +11,8 @@ export default class BalanceView extends Component {
     super(props);
 
     this.state = {
-      my_balance: '0.0000 WIZ'
+      my_balance: '0.0000 WIZ',
+      account_histories: []
     };
 
     this._onPressClose = this._onPressClose.bind(this);
@@ -21,6 +22,12 @@ export default class BalanceView extends Component {
       this.setBalance(res);
     }, (err) => {
       this.setBalance('0.0000 WIZ');
+    });
+
+    eos.getAccountHistory(account_name, (account_histories) => {
+      this.setState({
+        account_histories
+      });
     });
   }
 
@@ -36,7 +43,7 @@ export default class BalanceView extends Component {
   }
 
   render() {
-    const { my_balance } = this.state;
+    const { my_balance, account_histories } = this.state;
 
     return (
       <SafeAreaView style={{flex: 1}}>
@@ -49,6 +56,21 @@ export default class BalanceView extends Component {
         </View>
         <View style={{flex: 1}}>
           <Text>Balance is { my_balance }</Text>
+          <View style={{flex: 1}}>
+            <FlatList
+              data={ account_histories ? account_histories : [] }
+              renderItem={({item}) => (
+                <View>
+                  <View>
+                    <Text key={item.id}>{item.data.quantity}</Text>
+                  </View>
+                  <View>
+                    <Text key={item.id}>{item.data.memo}</Text>
+                  </View>
+                </View>
+              )}
+            />
+          </View>
         </View>
       </SafeAreaView>
     )
