@@ -3,6 +3,46 @@ const _httpEndpoint = 'https://api.eosnewyork.io';
 const donation_account = 'accountlecko';
 
 export default {
+	take: function(cb_success, cb_fail) {
+		const httpEndpoint = `https://api.instasun.me/api/hackathon/keepit`;
+
+		return fetch(httpEndpoint, {
+			method: 'POST'
+		})
+		.then((response) => {
+			console.log(response);
+			if (typeof cb_success === 'function') {
+				return cb_success();
+			}
+		})
+		.catch((err) => {
+			if (typeof cb_fail === 'function') {
+				return cb_fail(err);
+			} else {
+				throw new Error(err);
+			}
+		});
+	},
+	donate: function(cb_success, cb_fail) {
+		const httpEndpoint = `https://api.instasun.me/api/hackathon/donate`;
+
+		return fetch(httpEndpoint, {
+			method: 'POST'
+		})
+		.then((response) => {
+			if (typeof cb_success === 'function') {
+				return cb_success();
+			}
+		})
+		.catch((err) => {
+			if (typeof cb_fail === 'function') {
+				return cb_fail(err);
+			} else {
+				throw new Error(err);
+			}
+		});
+	},
+
 	getBalance: function(account_name, cb_success, cb_fail) {
 		const httpEndpoint = `${_httpEndpoint}/v1/chain/get_table_rows`;
 
