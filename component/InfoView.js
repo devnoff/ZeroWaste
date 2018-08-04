@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, TouchableOpacity, Image, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather'
 
+import eos from '../library/eos';
+const account_name = 'robinsonpark';
+
 export default class InfoView extends Component {
 
   state = {
@@ -12,8 +15,18 @@ export default class InfoView extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      account_histories: []
+    };
+
     console.log(this.props.navigation.getParam('photo', null))
 
+    eos.getAccountHistory(account_name, (res) => {
+      console.log('account_histories', res);
+      this.setState({
+        account_histories
+      });
+    });
   }
 
   _onPressClose() {
