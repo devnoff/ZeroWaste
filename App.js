@@ -4,6 +4,8 @@ import { createStackNavigator } from 'react-navigation';
 import CameraView from './component/CameraView';
 import InfoView from './component/InfoView';
 import BalanceView from './component/BalanceView';
+import LearnView from './component/LearnView';
+import WebView from './component/WebView';
 
 const RootStack = createStackNavigator(
 	{
@@ -15,6 +17,12 @@ const RootStack = createStackNavigator(
 		},
 		Balance: {
 			screen: BalanceView
+		},
+		Learn: {
+			screen: LearnView
+		},
+		Web: {
+			screen: WebView
 		}
 	},
 	{

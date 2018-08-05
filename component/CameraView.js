@@ -5,7 +5,10 @@ import OnLayout from 'react-native-on-layout';
 import Dimensions from 'Dimensions';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import numeral from 'numeral';
+import { isIphoneX } from 'react-native-iphone-x-helper'
 
+import eos from '../library/eos';
+const account_name = 'robinsonpark';
 
 const Clarifai = require('clarifai');
 
@@ -19,6 +22,8 @@ const MODE_IR = 'MODE_IR';
 var {height, width} = Dimensions.get('window');
 
 var __detected = false;
+
+
 
 export default class CameraView extends Component {
 	constructor(props) {
@@ -37,9 +42,23 @@ export default class CameraView extends Component {
 			},
 			appState: 'active',
       cameraMode: MODE_BARCODE,
-      fade: new Animated.Value(0.3)
+      fade: new Animated.Value(0.3),
+      balance: '0.0000 WIZ'
 		};
+
+    this._getBalance();
+    setInterval(() => {
+      this._getBalance();
+    }, 3000);
 	}
+
+  _getBalance() {
+    eos.getBalance(account_name, (res) => {
+      this.setState({ balance: res });
+    }, (err) => {
+      this.setState({ balance: '0.0000 WIZ' });
+    });
+  }
 
 	componentDidMount() {
     AppState.addEventListener('change', this._handleAppStateChange);
@@ -47,6 +66,10 @@ export default class CameraView extends Component {
 
   componentWillUnmount() {
     AppState.removeEventListener('change', this._handleAppStateChange);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
   }
 
   _showCapturebutton() {
@@ -140,7 +163,10 @@ export default class CameraView extends Component {
 
     this.camera.capture()
       .then((data) => {
-        console.log(data)
+        this.props.navigation.navigate('Info', {
+          code: 'Plastic Bottle',
+          photo: data
+        });
       })
       .catch(err => {
         console.error(err)
@@ -170,7 +196,7 @@ export default class CameraView extends Component {
 	}
 
 	render() {
-		const { appState, cameraMode, fade } = this.state;
+		const { appState, cameraMode, fade, balance } = this.state;
 		const styles = this.defaultStyles();
 		return (
 			<SafeAreaView style={styles.container}>
@@ -184,15 +210,14 @@ export default class CameraView extends Component {
               <View style={styles.balanceBox}>
       					<TouchableOpacity style={styles.balanceButton} onPress={this._onPressBalance.bind(this)}>
       						<Text style={styles.balanceText}>
-      							<Icon name="user" size={16} /> {numeral(100000).format('0,0.00')} WIZ
+      							<Icon name="user" size={16} /> {balance}
       						</Text>
       					</TouchableOpacity>
-
-                <TouchableOpacity style={{padding: 5, marginTop: 10}} onPress={this._onPressLearn.bind(this)}>
+                {/* <TouchableOpacity style={{padding: 5, marginTop: 10}} onPress={this._onPressLearn.bind(this)}>
       						<Text style={{color: 'blue'}}>
                     Learn
       						</Text>
-      					</TouchableOpacity>
+      					</TouchableOpacity> */}
       				</View>
       				{ appState === 'active'
       				? <RNCamera
@@ -257,7 +282,8 @@ export default class CameraView extends Component {
 				backgroundColor: 'black'
 			},
 			balanceBox: {
-				flex: 1,
+				minHeight: 42,
+        height: isIphoneX ? '15%' : '5%',
 				backgroundColor: 'black',
 				justifyContent: 'center',
 				alignItems: 'center'

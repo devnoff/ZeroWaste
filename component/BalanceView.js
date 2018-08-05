@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { View, FlatList, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather'
+import AWIcon from 'react-native-vector-icons/FontAwesome';
+import moment from 'moment';
+import _ from 'lodash';
 
 import eos from '../library/eos';
 const account_name = 'robinsonpark';
@@ -25,8 +28,9 @@ export default class BalanceView extends Component {
     });
 
     eos.getAccountHistory(account_name, (account_histories) => {
+      var sorted = _.sortBy(account_histories, ['blockId'], [false])
       this.setState({
-        account_histories
+        account_histories: sorted
       });
     });
   }
@@ -44,6 +48,7 @@ export default class BalanceView extends Component {
 
   render() {
     const { my_balance, account_histories } = this.state;
+    console.log(account_histories);
 
     return (
       <SafeAreaView style={{flex: 1}}>
@@ -55,14 +60,26 @@ export default class BalanceView extends Component {
           </View>
         </View>
         <View style={{flex: 1}}>
-          <Text>Balance is { my_balance }</Text>
-          <View style={{flex: 1}}>
+          <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+            <AWIcon name="user" size={30} />
+            <Text>{ account_name }</Text>
+            <Text style={{fontSize: 25, marginTop: 20, fontWeight: 'bold'}}>{ my_balance }</Text>
+          </View>
+          <View style={{flex: 1, marginTop: 20, padding: 20}}>
             <FlatList
               data={ account_histories ? account_histories : [] }
               renderItem={({item}) => (
-                <View key={item.id}>
-                  <View>
-                    <Text>{item.data.quantity}</Text>
+                <View style={{
+                  backgroundColor: '#fff',
+                  marginBottom: 10,
+                  minHeight: 44,
+                  justifyContent: 'center',
+                  padding: 5
+
+                }} key={item.id}>
+                  <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Text style={{fontWeight: 'bold'}}>{item.data.quantity}</Text>
+                    <Text style={{fontWeight: 'normal', color:'#999', fontSize: 11}}>#{item.blockId}</Text>
                   </View>
                   <View>
                     <Text>{item.data.memo}</Text>
